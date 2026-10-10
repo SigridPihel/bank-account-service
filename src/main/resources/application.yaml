@@ -1,3 +1,5 @@
 spring:
   application:
     name: bank-account-service
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
