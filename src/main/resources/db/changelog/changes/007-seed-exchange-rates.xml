@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Fixed exchange rates, derived from one base rate per currency against EUR:
+        1 EUR = 1.08 USD = 11.40 SEK = 0.84 GBP.
+        Every other pair is calculated from these (e.g. USD -> SEK = 11.40 / 1.08),
+        so converting back and forth never creates money.
+    -->
+    <changeSet id="007-seed-exchange-rates" author="sigrid">
+        <!-- from EUR -->
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="EUR"/>
+            <column name="to_currency_code" value="USD"/>
+            <column name="rate" valueNumeric="1.080000"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="EUR"/>
+            <column name="to_currency_code" value="SEK"/>
+            <column name="rate" valueNumeric="11.400000"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="EUR"/>
+            <column name="to_currency_code" value="GBP"/>
+            <column name="rate" valueNumeric="0.840000"/>
+        </insert>
+
+        <!-- from USD -->
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="USD"/>
+            <column name="to_currency_code" value="EUR"/>
+            <column name="rate" valueNumeric="0.925926"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="USD"/>
+            <column name="to_currency_code" value="SEK"/>
+            <column name="rate" valueNumeric="10.555556"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="USD"/>
+            <column name="to_currency_code" value="GBP"/>
+            <column name="rate" valueNumeric="0.777778"/>
+        </insert>
+
+        <!-- from SEK -->
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="SEK"/>
+            <column name="to_currency_code" value="EUR"/>
+            <column name="rate" valueNumeric="0.087719"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="SEK"/>
+            <column name="to_currency_code" value="USD"/>
+            <column name="rate" valueNumeric="0.094737"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="SEK"/>
+            <column name="to_currency_code" value="GBP"/>
+            <column name="rate" valueNumeric="0.073684"/>
+        </insert>
+
+        <!-- from GBP -->
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="GBP"/>
+            <column name="to_currency_code" value="EUR"/>
+            <column name="rate" valueNumeric="1.190476"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="GBP"/>
+            <column name="to_currency_code" value="USD"/>
+            <column name="rate" valueNumeric="1.285714"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_code" value="GBP"/>
+            <column name="to_currency_code" value="SEK"/>
+            <column name="rate" valueNumeric="13.571429"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

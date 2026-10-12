@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="006-seed-currencies" author="sigrid">
+        <insert tableName="currency">
+            <column name="code" value="EUR"/>
+            <column name="name" value="Euro"/>
+        </insert>
+        <insert tableName="currency">
+            <column name="code" value="USD"/>
+            <column name="name" value="US Dollar"/>
+        </insert>
+        <insert tableName="currency">
+            <column name="code" value="SEK"/>
+            <column name="name" value="Swedish Krona"/>
+        </insert>
+        <insert tableName="currency">
+            <column name="code" value="GBP"/>
+            <column name="name" value="British Pound Sterling"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
