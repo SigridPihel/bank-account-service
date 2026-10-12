@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="003-create-balance-table" author="sigrid">
+        <createTable tableName="balance">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints nullable="false"
+                           foreignKeyName="fk_balance_account"
+                           referencedTableName="account"
+                           referencedColumnNames="id"/>
+            </column>
+            <column name="currency_code" type="varchar(3)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_balance_currency"
+                             referencedTableName="currency"
+                             referencedColumnNames="code"/>
+            </column>
+            <column name="amount" type="NUMERIC(19,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="balance"
+                             columnNames="account_id, currency_code"
+                             constraintName="uq_balance_account_currency"/>
+
+        <sql>
+            ALTER TABLE balance
+                ADD CONSTRAINT chk_balance_amount_non_negative CHECK (amount >= 0);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,5 +1,5 @@
-spring:
-  application:
-    name: bank-account-service
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
+spring.application.name=bank-account-service
+spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.hibernate.ddl-auto=validate

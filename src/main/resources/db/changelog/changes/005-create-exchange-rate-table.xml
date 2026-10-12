@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="005-create-exchange-rate-table" author="sigrid">
+        <createTable tableName="exchange_rate">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="from_currency_code" type="varchar(3)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_exchange_rate_from_currency"
+                             referencedTableName="currency"
+                             referencedColumnNames="code"/>
+            </column>
+            <column name="to_currency_code" type="varchar(3)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_exchange_rate_to_currency"
+                             referencedTableName="currency"
+                             referencedColumnNames="code"/>
+            </column>
+            <column name="rate" type="NUMERIC(19,6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="exchange_rate"
+                             columnNames="from_currency_code, to_currency_code"
+                             constraintName="uq_exchange_rate_from_to_currency"/>
+
+        <sql><![CDATA[
+            ALTER TABLE exchange_rate
+                ADD CONSTRAINT chk_exchange_rate_positive CHECK (rate > 0);
+            ALTER TABLE exchange_rate
+                ADD CONSTRAINT chk_exchange_rate_different_currencies CHECK (from_currency_code <> to_currency_code);
+            ]]></sql>
+    </changeSet>
+
+</databaseChangeLog>

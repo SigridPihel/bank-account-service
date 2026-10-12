@@ -1,17 +1,25 @@
 package io.github.sigridpihel.bank_account_service.model.entity;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+@Entity
 public class Balance {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long accountId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Account account;
 
-    private String currency;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Currency currency;
 
-     private BigDecimal amount;
+    private BigDecimal amount;
+
+    @OneToMany(mappedBy = "balance")
+    private List<Transaction> transactions;
 }

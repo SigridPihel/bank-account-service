@@ -1,6 +1,7 @@
 package io.github.sigridpihel.bank_account_service.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import io.github.sigridpihel.bank_account_service.model.entity.Balance;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BalanceRepository extends CrudRepository<Balance, Long> {
+public interface BalanceRepository extends JpaRepository<Balance, Long> {
 }
