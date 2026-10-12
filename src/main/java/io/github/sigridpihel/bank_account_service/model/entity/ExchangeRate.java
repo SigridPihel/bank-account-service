@@ -1,10 +1,13 @@
 package io.github.sigridpihel.bank_account_service.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
+@Getter
 public class ExchangeRate {
 
     @Id
