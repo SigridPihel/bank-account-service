@@ -46,6 +46,12 @@ public class GlobalExceptionHandler {
         return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
+    @ExceptionHandler(ExchangeAmountTooSmallException.class)
+    public ResponseEntity<ErrorResponse> handleExchangeAmountTooSmall(ExchangeAmountTooSmallException e) {
+        log.warn("Exchange amount too small: {}", e.getMessage());
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<ErrorResponse> handleInsufficientFunds(InsufficientFundsException e) {
         log.warn("Insufficient funds: {}", e.getMessage());

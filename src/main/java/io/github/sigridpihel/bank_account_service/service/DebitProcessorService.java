@@ -61,6 +61,10 @@ public class DebitProcessorService {
 
         BigDecimal converted = request.amount().multiply(rate).setScale(2, RoundingMode.HALF_EVEN);
 
+        if (converted.signum() == 0) {
+            throw new ExchangeAmountTooSmallException(request.amount(), from.getCode(), to.getCode());
+        }
+
         Balance fromBalance = lockExistingBalance(account, from);
         Balance toBalance = lockOrCreateBalance(account, to);
 
