@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -55,5 +56,15 @@ public class AccountService {
     public BalanceResponse debit(MoneyRequest request) {
         externalLoggingClient.log();
         return debitProcessorService.debit(request);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BalanceResponse> getBalances(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountNotFoundException(accountNumber));
+
+        return account.getBalances().stream()
+                .map(balance -> new BalanceResponse(balance.getCurrency().getCode(),balance.getAmount()))
+                .toList();
     }
 }
