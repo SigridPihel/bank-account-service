@@ -1,6 +1,9 @@
 package io.github.sigridpihel.bank_account_service.service;
 
+import io.github.sigridpihel.bank_account_service.client.ExternalLoggingClient;
 import io.github.sigridpihel.bank_account_service.exception.AccountNotFoundException;
+import io.github.sigridpihel.bank_account_service.exception.BalanceNotFoundException;
+import io.github.sigridpihel.bank_account_service.exception.InsufficientFundsException;
 import io.github.sigridpihel.bank_account_service.exception.UnsupportedCurrencyException;
 import io.github.sigridpihel.bank_account_service.model.dto.BalanceResponse;
 import io.github.sigridpihel.bank_account_service.model.dto.MoneyRequest;
@@ -27,6 +30,8 @@ public class AccountService {
     private final CurrencyRepository currencyRepository;
     private final BalanceRepository balanceRepository;
     private final TransactionRepository transactionRepository;
+    private final ExternalLoggingClient externalLoggingClient;
+    private final DebitProcessorService debitProcessorService;
 
     @Transactional
     public BalanceResponse credit(MoneyRequest request) {
@@ -44,5 +49,11 @@ public class AccountService {
         transactionRepository.save(new Transaction(balance, TransactionType.CREDIT, request.amount()));
 
         return new BalanceResponse(currency.getCode(), balance.getAmount());
+    }
+
+
+    public BalanceResponse debit(MoneyRequest request) {
+        externalLoggingClient.log();
+        return debitProcessorService.debit(request);
     }
 }
