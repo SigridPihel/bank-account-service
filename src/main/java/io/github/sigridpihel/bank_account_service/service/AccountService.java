@@ -1,21 +1,18 @@
 package io.github.sigridpihel.bank_account_service.service;
 
 import io.github.sigridpihel.bank_account_service.client.ExternalLoggingClient;
-import io.github.sigridpihel.bank_account_service.exception.AccountNotFoundException;
-import io.github.sigridpihel.bank_account_service.exception.BalanceNotFoundException;
-import io.github.sigridpihel.bank_account_service.exception.InsufficientFundsException;
-import io.github.sigridpihel.bank_account_service.exception.UnsupportedCurrencyException;
+import io.github.sigridpihel.bank_account_service.exception.*;
 import io.github.sigridpihel.bank_account_service.model.dto.BalanceResponse;
+import io.github.sigridpihel.bank_account_service.model.dto.ExchangeRequest;
+import io.github.sigridpihel.bank_account_service.model.dto.ExchangeResponse;
 import io.github.sigridpihel.bank_account_service.model.dto.MoneyRequest;
 import io.github.sigridpihel.bank_account_service.model.entity.Account;
 import io.github.sigridpihel.bank_account_service.model.entity.Balance;
 import io.github.sigridpihel.bank_account_service.model.entity.Currency;
 import io.github.sigridpihel.bank_account_service.model.entity.Transaction;
 import io.github.sigridpihel.bank_account_service.model.enumeration.TransactionType;
-import io.github.sigridpihel.bank_account_service.repository.AccountRepository;
-import io.github.sigridpihel.bank_account_service.repository.BalanceRepository;
-import io.github.sigridpihel.bank_account_service.repository.CurrencyRepository;
-import io.github.sigridpihel.bank_account_service.repository.TransactionRepository;
+import io.github.sigridpihel.bank_account_service.repository.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +61,17 @@ public class AccountService {
                 .orElseThrow(() -> new AccountNotFoundException(accountNumber));
 
         return account.getBalances().stream()
-                .map(balance -> new BalanceResponse(balance.getCurrency().getCode(),balance.getAmount()))
+                .map(balance -> new BalanceResponse(balance.getCurrency().getCode(), balance.getAmount()))
                 .toList();
+    }
+
+    public ExchangeResponse exchangeCurrencies(ExchangeRequest request) {
+        if (request.fromCurrency().equals(request.toCurrency())) {
+            throw new SameCurrencyException(request.fromCurrency());
+        }
+
+        externalLoggingClient.log();
+
+        return debitProcessorService.exchange(request);
     }
 }

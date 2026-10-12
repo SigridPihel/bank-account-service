@@ -1,6 +1,8 @@
 package io.github.sigridpihel.bank_account_service.controller;
 
 import io.github.sigridpihel.bank_account_service.model.dto.BalanceResponse;
+import io.github.sigridpihel.bank_account_service.model.dto.ExchangeRequest;
+import io.github.sigridpihel.bank_account_service.model.dto.ExchangeResponse;
 import io.github.sigridpihel.bank_account_service.model.dto.MoneyRequest;
 import io.github.sigridpihel.bank_account_service.service.AccountService;
 import jakarta.validation.Valid;
@@ -37,5 +39,12 @@ public class AccountController {
     public List<BalanceResponse> getBalances(
             @NotBlank @RequestParam("accountNumber") String accountNumber) {
         return accountService.getBalances(accountNumber);
+    }
+
+    @PostMapping("/exchange")
+    @ResponseStatus(HttpStatus.OK)
+    public ExchangeResponse exchangeCurrencies(
+            @Valid @RequestBody ExchangeRequest request) {
+        return accountService.exchangeCurrencies(request);
     }
 }
