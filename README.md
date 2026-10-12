@@ -25,13 +25,36 @@ Balances are never edited directly. They only change through these operations, a
 
 ## 4. Running the application
 
-**Requirements:** Java 25 and **Docker running**. PostgreSQL runs in a container defined in `compose.yaml`, and Spring Boot starts it automatically.
+```bash
+git clone https://github.com/SigridPihel/bank-account-service.git
+cd bank-account-service
+```
+
+### Option A: Docker only (recommended)
+
+**Requirements:** Docker running. Java is not needed.
+
+```bash
+docker compose up --build
+```
+
+This builds the service from the `Dockerfile` and starts it together with PostgreSQL. The first build takes a few minutes (Gradle downloads its dependencies inside Docker). The app is ready when the log shows `Started BankAccountServiceApplication`.
+
+Stop with `docker compose down` (add `-v` to also delete the data).
+
+### Option B: from source with Gradle (for development)
+
+**Requirements:** Java 25 and Docker running.
 
 ```bash
 ./gradlew bootRun
 ```
 
-On startup, Liquibase creates the tables and loads the seed data. The app runs on `http://localhost:8080`.
+Spring Boot starts only the PostgreSQL container from `compose.yaml` (`spring.docker.compose.start.arguments=db`) and runs the app from Gradle.
+
+### After starting
+
+On startup, Liquibase creates the tables and loads the seed data. The app runs on `http://localhost:8080` (make sure the port is free).
 
 **Swagger UI:** http://localhost:8080/swagger-ui.html: try all endpoints from the browser.
 
